@@ -7,34 +7,29 @@ public class BankAccount {
     private final ArrayList<Transaction> oldTransactions;
 
     public BankAccount(double initialBalance) {
-        if (initialBalance<0){
+        if (initialBalance < 0) {
             throw new IllegalArgumentException("El saldo inicial no puede ser negativo");
         }
         this.initialBalance = initialBalance;
         this.transactions = new ArrayList<>();
-        this.oldTransactions=new ArrayList<>();
+        this.oldTransactions = new ArrayList<>();
     }
 
-    public void deposit(double amount) {
-        if (amount<0){
-            throw new IllegalArgumentException("El monto no puede ser negativo");
+    public void deposit(double amount) throws NoNegativeOperationException {
+        if (amount < 0) {
+            throw new NoNegativeOperationException("El monto no puede ser negativo");
         }
         transactions.add(new Transaction(amount));
     }
 
-    public void withdraw(double amount) {
-        if (amount<0){
-            throw new IllegalArgumentException("El monto no puede ser negativo");
+    public void withdraw(double amount) throws NoNegativeOperationException, InsufficientFoundsException {
+        if (amount < 0) {
+            throw new NoNegativeOperationException("El monto no puede ser negativo");
         }
-        if (amount>checkCurrentBalance()){
-            throw new IllegalArgumentException("Saldo insuficiente");
+        if (amount > checkCurrentBalance()) {
+            throw new InsufficientFoundsException("Saldo insuficiente");
         }
-
-        if (initialBalance >= amount) {
-            transactions.add(new Transaction(-amount));
-        } else {
-            System.out.println("Saldo insuficiente");
-        }
+        transactions.add(new Transaction(-amount));
     }
 
     public double checkCurrentBalance() {
@@ -44,7 +39,8 @@ public class BankAccount {
         }
         return currentBalance;
     }
-    public void endPeriod(){
+
+    public void endPeriod() {
         oldTransactions.addAll(transactions);
         transactions.clear();
     }

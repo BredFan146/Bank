@@ -1,2 +1,5 @@
-public class NoNegativeOperationException {
+public class NoNegativeOperationException extends Exception {
+    public NoNegativeOperationException(String message) {
+        super(message);
+    }
 }

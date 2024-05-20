@@ -1,7 +1,4 @@
-import java.util.ArrayList;
-
-public class CreditCard extends BankAccount{
-
+public class CreditCard extends BankAccount {
 
     private final double creditLimit;
 
@@ -11,12 +8,15 @@ public class CreditCard extends BankAccount{
     }
 
     @Override
-    public void withdraw(double amount) {
+    public void withdraw(double amount) throws NoNegativeOperationException, InsufficientFoundsException {
         double availableBalance = checkCurrentBalance() + creditLimit;
+        if (amount < 0) {
+            throw new NoNegativeOperationException("El monto no puede ser negativo");
+        }
         if (availableBalance >= amount) {
-            getTransactions().add(new Transaction(amount));
+            getTransactions().add(new Transaction(-amount));
         } else {
-            System.out.println("Limite de credito excedido");
+            throw new InsufficientFoundsException("Limite de credito excedido");
         }
     }
 
